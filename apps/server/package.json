@@ -1,0 +1,22 @@
+{
+  "name": "@farm/server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsup --watch --onSuccess \"node dist/index.js\"",
+    "build": "tsup"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.27.0"
+  },
+  "devDependencies": {
+    "@farm/typescript-config": "workspace:^",
+    "@types/node": "^20",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5"
+  }
+}
