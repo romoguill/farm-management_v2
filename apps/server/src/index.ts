@@ -1,9 +1,9 @@
-import Fastify, { FastifyInstance } from 'fastify';
+import Fastify, { FastifyInstance } from "fastify";
 
 const server: FastifyInstance = Fastify({});
 
-server.get('/ping', async (req, res) => {
-  return { pong: 'OK' };
+server.get("/ping", async (req, res) => {
+  return { pong: "OK" };
 });
 
 const start = async () => {
