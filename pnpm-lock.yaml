@@ -29,6 +29,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@farm/trpc-api':
+        specifier: workspace:^
+        version: link:../../packages/trpc-api
       fastify:
         specifier: ^4.27.0
         version: 4.27.0

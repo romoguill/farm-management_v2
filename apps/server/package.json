@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@farm/trpc-api": "workspace:^",
     "fastify": "^4.27.0"
   },
   "devDependencies": {
