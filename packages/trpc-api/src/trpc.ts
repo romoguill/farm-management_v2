@@ -1,11 +1,14 @@
 import { initTRPC } from "@trpc/server";
-import { CreateNextContextOptions } from "@trpc/server/adapters/next";
+import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-export const createTRPCContext = async (opt: CreateNextContextOptions) => {
+export const createTRPCContext = async (opts: {
+  headers: Headers,
+
+}) => {
   // TODO: Not implementing auth yet but will need authtoken in context
-  const authToken = opt.req.headers.authorization;
+  const authToken = opts.headers.get('Authorization') ?? null;
 
   return { authToken };
 };
