@@ -1,16 +1,17 @@
-import { initTRPC } from "@trpc/server";
-import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import superjson from "superjson";
-import { ZodError } from "zod";
+import { initTRPC } from '@trpc/server';
+import superjson from 'superjson';
+import { ZodError } from 'zod';
 
-export const createTRPCContext = async (opts: {
-  headers: Headers,
-
-}) => {
+export const createTRPCContext = async (opts: { headers: Headers }) => {
   // TODO: Not implementing auth yet but will need authtoken in context
   const authToken = opts.headers.get('Authorization') ?? null;
 
   return { authToken };
+};
+
+const transformer = {
+  input: superjson,
+  output: superjson,
 };
 
 const t = initTRPC.context<typeof createTRPCContext>().create({

@@ -1,8 +1,8 @@
-import { createTRPCRouter, publicProcedure } from "./trpc";
+import { createTRPCRouter, publicProcedure } from './trpc';
 
 export const appRouter = createTRPCRouter({
   healthcheck: publicProcedure.query(() => {
-    return "OK";
+    return { status: 'OK' };
   }),
 });
 
