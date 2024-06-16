@@ -1,6 +1,7 @@
 {
   "extends": "@farm/typescript-config/base.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "dist",
     "module": "ESNext",
     "moduleResolution": "Bundler"

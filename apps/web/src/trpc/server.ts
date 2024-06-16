@@ -1,8 +1,8 @@
-import { createTRPCContext } from '@farm/trpc-api';
+import { createCaller, createTRPCContext } from '@farm/trpc-api';
 import { headers } from 'next/headers';
 import { cache } from 'react';
 
-const createContext = cache(async () => {
+const createContext = cache(() => {
   const header = new Headers(headers());
   header.set('x-trpc-source', 'rsc');
 
@@ -10,3 +10,5 @@ const createContext = cache(async () => {
     headers: header,
   });
 });
+
+export const api = createCaller(await createContext());
