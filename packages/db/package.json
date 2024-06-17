@@ -12,7 +12,13 @@
   "devDependencies": {
     "@farm/eslint-config": "workspace:^",
     "@farm/typescript-config": "workspace:^",
+    "@types/node": "^20",
+    "drizzle-kit": "^0.22.7",
     "tsup": "^8.1.0",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.31.2",
+    "postgres": "^3.4.4"
   }
 }
