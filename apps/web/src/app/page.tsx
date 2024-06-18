@@ -1,8 +1,16 @@
+'use client';
+
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { api } from 'src/trpc/server';
 
-export default async function Home() {
-  const check = await api.healthcheck();
+export default function Home() {
+  const [data, setData] = useState('');
 
-  return <main>{check.status}</main>;
+  useEffect(() => {
+    fetch('http://localhost:4000')
+      .then((response) => response.json())
+      .then((data) => setData(data));
+  }, []);
+  return <main>{JSON.stringify(data)}</main>;
 }

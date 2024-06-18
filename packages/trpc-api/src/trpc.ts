@@ -3,10 +3,7 @@ import superjson from 'superjson';
 import { ZodError } from 'zod';
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  // TODO: Not implementing auth yet but will need authtoken in context
-  const authToken = opts.headers.get('Authorization') ?? null;
-
-  return { authToken };
+  return { ...opts };
 };
 
 const transformer = {

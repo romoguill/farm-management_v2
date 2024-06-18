@@ -2,8 +2,14 @@
 
 import { AppRouter } from '@farm/trpc-api';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createTRPCReact, httpBatchLink, loggerLink } from '@trpc/react-query';
+import {
+  CreateTRPCReact,
+  createTRPCReact,
+  httpBatchLink,
+  loggerLink,
+} from '@trpc/react-query';
 import { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
+import { CreateTRPCReactBase } from 'node_modules/@trpc/react-query/dist/createTRPCReact';
 import { PropsWithChildren, useState } from 'react';
 import superjson from 'superjson';
 
@@ -26,7 +32,8 @@ const getQueryClient = () => {
   }
 };
 
-export const api = createTRPCReact<AppRouter>();
+export const api: CreateTRPCReactBase<AppRouter, unknown> =
+  createTRPCReact<AppRouter>();
 export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
