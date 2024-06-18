@@ -4,9 +4,14 @@ services:
   db:
     image: postgres
     restart: always
+    hostname: localhost
+    ports:
+      - "5432:5432"
     volumes:
-      - ~/apps/postgres:/var/lib/postgresql/dev
+       - postgres-data:/var/lib/postgresql/dev
     environment:
       - POSTGRES_PASSWORD=pass123
       - POSTGRES_USER=postgres
       - POSTGRES_DB=dev
+volumes:
+  postgres-data:
