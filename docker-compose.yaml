@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/dev
+    environment:
+      - POSTGRES_PASSWORD=pass123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=dev
