@@ -22,6 +22,7 @@
     "@farm/typescript-config": "workspace:^",
     "@fastify/cors": "^9.0.1",
     "@trpc/server": "^10.45.2",
+    "arctic": "^1.9.1",
     "fastify": "^4.28.0",
     "lucia": "^3.2.0",
     "zod": "^3.23.8"
