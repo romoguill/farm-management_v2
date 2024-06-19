@@ -8,7 +8,7 @@ export default function Home() {
   const [data, setData] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:4000')
+    fetch('http://localhost:4000/api/trpc/healthcheck')
       .then((response) => response.json())
       .then((data) => setData(data));
   }, []);
