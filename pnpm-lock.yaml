@@ -29,6 +29,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@farm/db':
+        specifier: workspace:^
+        version: link:../../packages/db
       '@farm/eslint-config':
         specifier: workspace:^
         version: link:../../packages/eslint-config
@@ -47,6 +50,9 @@ importers:
       fastify:
         specifier: ^4.28.0
         version: 4.28.0
+      lucia:
+        specifier: ^3.2.0
+        version: 3.2.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8

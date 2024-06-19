@@ -16,12 +16,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@farm/db": "workspace:^",
     "@farm/eslint-config": "workspace:^",
     "@farm/trpc-api": "workspace:^",
     "@farm/typescript-config": "workspace:^",
     "@fastify/cors": "^9.0.1",
     "@trpc/server": "^10.45.2",
     "fastify": "^4.28.0",
+    "lucia": "^3.2.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
