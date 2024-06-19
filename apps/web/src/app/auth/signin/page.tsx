@@ -1,4 +1,11 @@
+'use client';
+
+import { appRouter } from '@farm/trpc-api';
+import { api } from 'src/trpc/react';
+
 function SignInPage() {
+  const { mutate, data } = api.auth.signInGoogle.useMutation();
+  console.log(data);
   return (
     <div className='space-y-4'>
       <div>
@@ -13,9 +20,7 @@ function SignInPage() {
         </label>
       </div>
       <div>
-        <a href={`${process.env.NEXT_PUBLIC_API_URL}/signin/google`}>
-          Sign in with Google
-        </a>
+        <button onClick={() => mutate()}>Sign in with Google</button>
       </div>
     </div>
   );

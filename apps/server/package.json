@@ -20,6 +20,7 @@
     "@farm/eslint-config": "workspace:^",
     "@farm/trpc-api": "workspace:^",
     "@farm/typescript-config": "workspace:^",
+    "@fastify/cookie": "^9.3.1",
     "@fastify/cors": "^9.0.1",
     "@trpc/server": "^10.45.2",
     "arctic": "^1.9.1",

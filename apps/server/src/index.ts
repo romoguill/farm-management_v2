@@ -1,15 +1,20 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import cookie from '@fastify/cookie';
 import {
   FastifyTRPCPluginOptions,
   fastifyTRPCPlugin,
 } from '@trpc/server/adapters/fastify';
 import { appRouter, type AppRouter } from '@farm/trpc-api';
-import { createContext } from './trpc/context.js';
+import { createContext } from './libs/trpc/context';
 
 const fastify = Fastify({ logger: true });
 
-await fastify.register(cors, { origin: 'http://localhost:3000' });
+await fastify.register(cors, {
+  origin: 'http://localhost:3000',
+  credentials: true,
+});
+await fastify.register(cookie);
 
 await fastify.register(fastifyTRPCPlugin, {
   prefix: '/api/trpc',

@@ -56,7 +56,13 @@ export function TRPCReactProvider(props: PropsWithChildren) {
               operation.result instanceof Error),
         }),
         httpBatchLink({
-          url: '/api/trpc',
+          url: 'http://localhost:4000/api/trpc',
+          fetch(url, options) {
+            return fetch(url, {
+              ...options,
+              credentials: 'include',
+            });
+          },
         }),
       ],
     });
