@@ -1,8 +1,9 @@
 import { initTRPC } from '@trpc/server';
+import { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
-export const createTRPCContext = async (opts: { headers: Headers }) => {
+export const createTRPCContext = async (opts: CreateFastifyContextOptions) => {
   return { ...opts };
 };
 
@@ -23,6 +24,8 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 });
 
 // For making a call to the server inside the same server and avoid intance duplication
+
+/// <reference types="fastify" />
 export const createCallerFactory = t.createCallerFactory;
 
 export const createTRPCRouter = t.router;

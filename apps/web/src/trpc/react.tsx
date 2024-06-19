@@ -8,10 +8,12 @@ import {
   httpBatchLink,
   loggerLink,
 } from '@trpc/react-query';
+import { DecoratedProcedureRecord } from '@trpc/react-query/shared';
 import { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 import { CreateTRPCReactBase } from 'node_modules/@trpc/react-query/dist/createTRPCReact';
 import { PropsWithChildren, useState } from 'react';
 import superjson from 'superjson';
+import type { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
 
 const createQueryClient = () =>
   new QueryClient({
@@ -32,7 +34,10 @@ const getQueryClient = () => {
   }
 };
 
-export const api: CreateTRPCReactBase<AppRouter, unknown> =
+// export const api: CreateTRPCReactBase<AppRouter, unknown> & DecoratedProcedureRecord<> =
+//   createTRPCReact<AppRouter>();
+
+export const api: CreateTRPCReact<AppRouter, unknown, null> =
   createTRPCReact<AppRouter>();
 export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
