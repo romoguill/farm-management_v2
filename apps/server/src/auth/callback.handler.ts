@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { google } from '@farm/trpc-api';
 import { GoogleTokens, OAuth2RequestError } from 'arctic';
 import { z } from 'zod';
+import { db, users } from '@farm/db';
+import { lucia } from 'src/libs/lucia/auth-attributes';
 
 const providersApi = {
   google: 'https://openidconnect.googleapis.com/v1/userinfo',
@@ -51,7 +53,52 @@ export async function googleHandler(
     });
     const user = await response.json();
 
-    console.log(user);
+    const userProfile = profileSchemas.google.parse(user);
+
+    // Check for user in db
+    const existingUser = await db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.googleId, userProfile.sub),
+    });
+
+    // If exists, create a session token on db and set cookie on client using that session's id
+    if (existingUser) {
+      const session = await lucia.createSession(existingUser.id, {});
+      const sessionCookie = lucia.createSessionCookie(session.id);
+
+      res.setCookie(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+
+      return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+    }
+
+    // If it doesn't exist create it (Sign in with provider = Sign up)
+    const newUser = (
+      await db
+        .insert(users)
+        .values({
+          email: userProfile.email,
+          googleId: userProfile.sub,
+          username: userProfile.name,
+        })
+        .returning()
+    )[0];
+
+    // There are some github request for polishing this part. Check later
+    if (!newUser) throw new Error('Error creating user in db');
+
+    const session = await lucia.createSession(newUser.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+
+    res.setCookie(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
+
+    return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
   } catch (error) {
     console.error(error);
     return res.redirect(`${process.env.CLIENT_URL}/auth?error=oauth`);

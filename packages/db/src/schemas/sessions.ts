@@ -3,7 +3,7 @@ import { users } from './users';
 
 export const sessions = pgTable('sessions', {
   id: varchar('id', { length: 255 }).primaryKey(),
-  userId: uuid('id')
+  userId: uuid('user_id')
     .notNull()
     .references(() => users.id),
   expiresAt: timestamp('expires_at', {
