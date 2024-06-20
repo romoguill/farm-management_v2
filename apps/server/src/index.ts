@@ -7,6 +7,7 @@ import {
 } from '@trpc/server/adapters/fastify';
 import { appRouter, type AppRouter } from '@farm/trpc-api';
 import { createContext } from './libs/trpc/context';
+import { authCallback } from './auth/callback.route';
 
 const fastify = Fastify({ logger: true });
 
@@ -30,6 +31,8 @@ await fastify.register(fastifyTRPCPlugin, {
 fastify.get('/', (req, res) => {
   return { server: 'OK' };
 });
+
+fastify.register(authCallback, { prefix: 'auth' });
 
 const start = async () => {
   try {
