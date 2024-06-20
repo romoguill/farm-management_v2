@@ -8,12 +8,9 @@ import {
   httpBatchLink,
   loggerLink,
 } from '@trpc/react-query';
-import { DecoratedProcedureRecord } from '@trpc/react-query/shared';
 import { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
-import { CreateTRPCReactBase } from 'node_modules/@trpc/react-query/dist/createTRPCReact';
 import { PropsWithChildren, useState } from 'react';
 import superjson from 'superjson';
-import type { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
 
 const createQueryClient = () =>
   new QueryClient({

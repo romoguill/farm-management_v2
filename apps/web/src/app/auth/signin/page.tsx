@@ -1,11 +1,17 @@
 'use client';
 
 import { appRouter } from '@farm/trpc-api';
+import { useRouter } from 'next/navigation';
 import { api } from 'src/trpc/react';
 
 function SignInPage() {
-  const { mutate, data } = api.auth.signInGoogle.useMutation();
-  console.log(data);
+  const router = useRouter();
+  const { mutate } = api.auth.signInGoogle.useMutation({
+    onSuccess: ({ url }) => {
+      router.replace(url);
+    },
+  });
+
   return (
     <div className='space-y-4'>
       <div>

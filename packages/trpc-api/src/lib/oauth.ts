@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import { Google } from 'arctic';
 
 export const google = new Google(

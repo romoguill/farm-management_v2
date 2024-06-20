@@ -7,7 +7,9 @@ export const authRouter = createTRPCRouter({
   signInGoogle: publicProcedure.mutation(async (ops) => {
     const state = generateState();
     const codeVerifier = generateCodeVerifier();
-    const url = await google.createAuthorizationURL(state, codeVerifier);
+    const url = await google.createAuthorizationURL(state, codeVerifier, {
+      scopes: ['email', 'profile'],
+    });
 
     const cookieState = cookie.serialize('state', state, {
       secure: process.env.NODE_ENV === 'production',
