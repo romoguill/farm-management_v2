@@ -7,8 +7,6 @@ import postgres from 'postgres';
 import * as usersSchema from './schemas/users';
 import * as sessionsSchema from './schemas/sessions';
 
-console.log('@@@@@@@@@@@@@@@@@', process.env.DATABASE_URL);
-
 const migrationClient = postgres(process.env.DATABASE_URL || '', { max: 1 });
 const dbMigrate = (config: string | MigrationConfig): Promise<void> =>
   migrate(drizzle(migrationClient), config);

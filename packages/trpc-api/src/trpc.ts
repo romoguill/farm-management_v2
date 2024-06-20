@@ -23,9 +23,6 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   }),
 });
 
-// For making a call to the server inside the same server and avoid intance duplication
-
-/// <reference types="fastify" />
 export const createCallerFactory = t.createCallerFactory;
 
 export const createTRPCRouter = t.router;

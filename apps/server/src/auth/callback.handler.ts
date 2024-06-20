@@ -1,9 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { google } from '@farm/trpc-api';
-import { GoogleTokens, OAuth2RequestError } from 'arctic';
 import { z } from 'zod';
 import { db, users } from '@farm/db';
-import { lucia } from 'src/libs/lucia/auth-attributes';
+import { lucia } from '@farm/db';
 
 const providersApi = {
   google: 'https://openidconnect.googleapis.com/v1/userinfo',
