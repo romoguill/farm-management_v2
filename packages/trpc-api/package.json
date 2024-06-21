@@ -23,6 +23,7 @@
   "dependencies": {
     "@farm/db": "workspace:^",
     "@fastify/cookie": "^9.3.1",
+    "@node-rs/argon2": "^1.8.3",
     "@trpc/server": "^10.45.2",
     "arctic": "^1.9.1",
     "dotenv": "^16.4.5",

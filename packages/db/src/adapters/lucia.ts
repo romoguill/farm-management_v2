@@ -4,6 +4,7 @@ import { luciaAdapter } from './lucia-drizzle.adapter';
 export interface DatabaseUserAttributes {
   google_id: number;
   username: string;
+  email: string;
 }
 
 declare module 'lucia' {
@@ -24,6 +25,7 @@ export const lucia = new Lucia(luciaAdapter, {
     return {
       googleId: attributes.google_id,
       username: attributes.username,
+      email: attributes.email,
     };
   },
 });

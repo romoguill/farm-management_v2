@@ -10,11 +10,6 @@ export const createTRPCContext = async (
   return { ...opts, user: undefined };
 };
 
-const transformer = {
-  input: superjson,
-  output: superjson,
-};
-
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter: ({ shape, error }) => ({
