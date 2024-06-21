@@ -17,6 +17,8 @@ await fastify.register(cors, {
 });
 await fastify.register(cookie);
 
+const a = 0;
+
 await fastify.register(fastifyTRPCPlugin, {
   prefix: '/api/trpc',
   trpcOptions: {

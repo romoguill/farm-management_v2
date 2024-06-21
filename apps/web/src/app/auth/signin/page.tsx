@@ -8,7 +8,7 @@ function SignInPage() {
   const router = useRouter();
   const { mutate } = api.auth.signInGoogle.useMutation({
     onSuccess: ({ url }) => {
-      router.replace(url);
+      router.push(url);
     },
   });
 

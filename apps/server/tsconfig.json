@@ -2,9 +2,11 @@
   "extends": "@farm/typescript-config/base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "dist",
+    "outDir": "./dist",
+    "rootDir": "./src",
     "module": "ESNext",
-    "moduleResolution": "Bundler"
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]

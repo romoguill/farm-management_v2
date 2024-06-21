@@ -1,6 +1,10 @@
 import 'dotenv/config';
 
-import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
+import {
+  RouterCaller,
+  type inferRouterInputs,
+  type inferRouterOutputs,
+} from '@trpc/server';
 import { type AppRouter, appRouter } from './root.router';
 import { createCallerFactory, createTRPCContext } from './trpc';
 import { google } from './lib/oauth';

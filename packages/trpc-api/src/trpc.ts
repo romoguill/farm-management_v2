@@ -6,11 +6,8 @@ import { lucia, type DatabaseUserAttributes } from '@farm/db';
 
 export const createTRPCContext = async (
   opts: CreateFastifyContextOptions,
-): Promise<
-  CreateFastifyContextOptions & { user: DatabaseUserAttributes | null }
-> => {
-  const user: DatabaseUserAttributes | null = null;
-  return { ...opts, user };
+): Promise<CreateFastifyContextOptions & { user?: DatabaseUserAttributes }> => {
+  return { ...opts, user: undefined };
 };
 
 const transformer = {
@@ -41,7 +38,29 @@ export const protectedProcedure = publicProcedure.use(async ({ ctx, next }) => {
     throw new TRPCError({ code: 'UNAUTHORIZED' });
   }
 
-  const { user } = await lucia.validateSession(sessionId);
+  const { user, session } = await lucia.validateSession(sessionId);
+
+  try {
+    // If session.fresh === true, means that the session in db was renwed and must update the cookie to match it
+    if (session && session.fresh) {
+      const sessionCookie = lucia.createSessionCookie(session.id);
+      ctx.res.setCookie(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+    }
+
+    // If validate session failed, delete old cookie
+    if (!session) {
+      const sessionCookie = lucia.createBlankSessionCookie();
+      ctx.res.setCookie(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+    }
+  } catch (error) {}
 
   return next({
     ctx: {

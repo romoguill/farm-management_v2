@@ -18,6 +18,7 @@
     },
     "dev": {
       "dependsOn": ["^build"],
+      "outputs": [".devtemp/**"],
       "cache": false,
       "persistent": true
     },
