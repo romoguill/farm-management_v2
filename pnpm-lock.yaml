@@ -209,6 +209,9 @@ importers:
 
   packages/trpc-api:
     dependencies:
+      '@farm/db':
+        specifier: workspace:^
+        version: link:../db
       '@fastify/cookie':
         specifier: ^9.3.1
         version: 9.3.1

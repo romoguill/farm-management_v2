@@ -1,6 +1,6 @@
 import { generateCodeVerifier, generateState } from 'arctic';
 import { google } from '../lib/oauth';
-import { createTRPCRouter, publicProcedure } from '../trpc';
+import { createTRPCRouter, publicProcedure, protectedProcedure } from '../trpc';
 import cookie from '@fastify/cookie';
 
 export const authRouter = createTRPCRouter({
@@ -28,5 +28,8 @@ export const authRouter = createTRPCRouter({
     ops.ctx.res.header('set-cookie', cookieCode);
 
     return { url: url.toString() };
+  }),
+  me: protectedProcedure.query(async ({ ctx: { user } }) => {
+    return { user };
   }),
 });

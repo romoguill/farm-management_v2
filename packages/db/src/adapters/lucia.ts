@@ -1,7 +1,7 @@
 import { Lucia } from 'lucia';
 import { luciaAdapter } from './lucia-drizzle.adapter';
 
-interface DatabaseUserAttributes {
+export interface DatabaseUserAttributes {
   google_id: number;
   username: string;
 }
