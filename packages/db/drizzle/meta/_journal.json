@@ -36,6 +36,20 @@
       "when": 1719011793191,
       "tag": "0004_mushy_inertia",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1719066841468,
+      "tag": "0005_remarkable_naoko",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1719068430884,
+      "tag": "0006_naive_vector",
+      "breakpoints": true
     }
   ]
 }
