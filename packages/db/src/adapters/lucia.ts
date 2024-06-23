@@ -6,6 +6,7 @@ export interface DatabaseUserAttributes {
   username: string;
   email: string;
   email_verified: boolean;
+  id: string;
 }
 
 declare module 'lucia' {
@@ -28,6 +29,7 @@ export const lucia = new Lucia(luciaAdapter, {
       username: attributes.username,
       email: attributes.email,
       emailVerified: attributes.email_verified,
+      id: attributes.id,
     };
   },
 });

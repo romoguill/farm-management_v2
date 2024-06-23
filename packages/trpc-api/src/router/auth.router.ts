@@ -3,9 +3,12 @@ import { google } from '../lib/oauth';
 import { createTRPCRouter, publicProcedure, protectedProcedure } from '../trpc';
 import cookie from '@fastify/cookie';
 import { z } from 'zod';
-import { db, lucia, users } from '@farm/db';
+import { db, emailVerifications, lucia, users } from '@farm/db';
 import { TRPCError } from '@trpc/server';
 import argon from '@node-rs/argon2';
+import { generateEmailVerificationCode } from '../utils/verification-code';
+import { eq } from 'drizzle-orm';
+import { isWithinExpirationDate } from 'oslo';
 
 // Recomended options from docs
 const ARGON_HASHING_OPTIONS = {
@@ -67,16 +70,26 @@ export const authRouter = createTRPCRouter({
         ARGON_HASHING_OPTIONS,
       );
 
+      // Create user in DB
       const [newUser] = await db
         .insert(users)
         .values({ email: input.email, passwordHash })
         .returning({ id: users.id, email: users.email });
 
-      if (!newUser)
+      if (!newUser || !newUser.email)
         throw new TRPCError({
           message: "Couldn't create user in database",
           code: 'INTERNAL_SERVER_ERROR',
         });
+
+      // Set up email verification code
+      const verificationCode = await generateEmailVerificationCode(
+        newUser.id,
+        newUser.email,
+      );
+
+      // TODO: Send email with verification code
+      // await sendEmailWithVerificationCode(newUser.email, verificationCode)
 
       const session = await lucia.createSession(newUser.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
@@ -88,5 +101,59 @@ export const authRouter = createTRPCRouter({
       );
 
       return { user: newUser };
+    }),
+  // For user to use code sent to email
+  emailVerification: protectedProcedure
+    .input(
+      z.object({
+        code: z.string().length(8),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const verifications = await db.query.emailVerifications.findFirst({
+        where: eq(emailVerifications.userId, ctx.user.id),
+        columns: { code: true, expiresAt: true, id: true },
+      });
+
+      if (!verifications || !verifications.code) {
+        throw new TRPCError({
+          message: "Couldn't retrieve verification code",
+          code: 'BAD_REQUEST',
+        });
+      }
+
+      // Delete for security and maintenance purpose
+      await db
+        .delete(emailVerifications)
+        .where(eq(emailVerifications.id, verifications.id));
+
+      if (!isWithinExpirationDate(verifications.expiresAt)) {
+        throw new TRPCError({
+          message: 'Must generate new code',
+          code: 'BAD_REQUEST',
+        });
+      }
+
+      const validCode = verifications.code === input.code;
+
+      if (!validCode) {
+        throw new TRPCError({ message: 'Code not valid', code: 'FORBIDDEN' });
+      }
+
+      // If valid delete old session, update user and recreate session
+      await lucia.invalidateUserSessions(ctx.user.id);
+      await db
+        .update(users)
+        .set({ emailVerified: true })
+        .where(eq(users.id, ctx.user.id));
+
+      const session = await lucia.createSession(ctx.user.id, {});
+      const sessionCookie = lucia.createSessionCookie(session.id);
+
+      ctx.res.setCookie(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
     }),
 });
