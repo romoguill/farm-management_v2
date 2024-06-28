@@ -1,15 +1,14 @@
-import { Button } from '../ui/button';
+import AuthSection from './auth-section';
+import Logo from './logo';
 
 type NavbarProps = {};
 
 function Navbar({}: NavbarProps) {
   return (
-    <nav>
-      <div className='container flex justify-center p-8'>
-        <div className='ml-auto flex gap-3'>
-          <Button>Login</Button>
-          <Button variant='secondary'>Register</Button>
-        </div>
+    <nav className='flex items-center justify-center'>
+      <div className='container flex items-center justify-center p-8'>
+        <Logo />
+        <AuthSection />
       </div>
     </nav>
   );
