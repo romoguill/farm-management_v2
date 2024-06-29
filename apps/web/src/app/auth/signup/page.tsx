@@ -2,7 +2,7 @@
 
 import { appRouter } from '@farm/trpc-api';
 import { useRouter } from 'next/navigation';
-import { api } from 'src/trpc/react';
+import { api } from '../../../trpc/react';
 
 function SignUpPage() {
   const router = useRouter();

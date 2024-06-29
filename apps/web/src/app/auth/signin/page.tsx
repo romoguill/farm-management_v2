@@ -1,10 +1,19 @@
 'use client';
 
-import { RouterInputs, appRouter } from '@farm/trpc-api';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { api } from 'src/trpc/react';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { loginSchema } from '@farm/trpc-api/validation-schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { api } from '../../../trpc/react';
+import { z } from 'zod';
 
 function SignInPage() {
   const router = useRouter();
@@ -14,28 +23,42 @@ function SignInPage() {
     },
   });
 
-  const form = useForm<RouterInputs['auth']['signInCredentials']>({
+  const form = useForm<z.infer<typeof loginSchema>>({
     defaultValues: { email: '', password: '' },
-    resolver: zodRe,
+    resolver: zodResolver(loginSchema),
   });
 
+  const onSubmit: SubmitHandler<z.infer<typeof loginSchema>> = (data) => {};
+
   return (
-    <div className='space-y-4'>
-      <div>
-        <h1>Sign In</h1>
-        <label>
-          Email
-          <input />
-        </label>
-        <label>
-          Password
-          <input />
-        </label>
-      </div>
-      <div>
-        <button onClick={() => mutate()}>Sign in with Google</button>
-      </div>
-    </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name='email'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder='Email' {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='password'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input placeholder='Email' {...field} type='password' />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
   );
 }
 

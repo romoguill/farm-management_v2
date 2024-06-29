@@ -5,14 +5,11 @@ import cookie from '@fastify/cookie';
 import { z } from 'zod';
 import { db, emailVerifications, lucia, users } from '@farm/db';
 import { TRPCError } from '@trpc/server';
-import argon, { verify } from '@node-rs/argon2';
 import { generateEmailVerificationCode } from '../utils/verification-code';
 import { eq } from 'drizzle-orm';
 import { isWithinExpirationDate } from 'oslo';
-import {
-  loginSchema,
-  registerSchema,
-} from 'src/validation-schemas/auth.schema';
+import { loginSchema, registerSchema } from '../validation-schemas/auth.schema';
+import bcrypt from 'bcryptjs';
 
 // Recomended options from docs
 const ARGON_HASHING_OPTIONS = {
@@ -71,10 +68,9 @@ export const authRouter = createTRPCRouter({
           code: 'BAD_REQUEST',
         });
 
-      const validPassword = await verify(
+      const validPassword = await bcrypt.compare(
         existingUser.passwordHash,
         input.password,
-        ARGON_HASHING_OPTIONS,
       );
 
       if (!validPassword)
@@ -104,10 +100,8 @@ export const authRouter = createTRPCRouter({
           code: 'CONFLICT',
         });
 
-      const passwordHash = await argon.hash(
-        input.password,
-        ARGON_HASHING_OPTIONS,
-      );
+      const salt = await bcrypt.genSalt(10);
+      const passwordHash = await bcrypt.hash(input.password, salt);
 
       // Create user in DB
       const [newUser] = await db
