@@ -156,4 +156,12 @@ export const authRouter = createTRPCRouter({
         sessionCookie.attributes,
       );
     }),
+  signOut: publicProcedure.mutation(({ ctx }) => {
+    const sessionCookie = lucia.createBlankSessionCookie();
+    ctx.res.setCookie(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
+  }),
 });
