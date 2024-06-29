@@ -9,6 +9,10 @@ import argon, { verify } from '@node-rs/argon2';
 import { generateEmailVerificationCode } from '../utils/verification-code';
 import { eq } from 'drizzle-orm';
 import { isWithinExpirationDate } from 'oslo';
+import {
+  loginSchema,
+  registerSchema,
+} from 'src/validation-schemas/auth.schema';
 
 // Recomended options from docs
 const ARGON_HASHING_OPTIONS = {
@@ -48,12 +52,7 @@ export const authRouter = createTRPCRouter({
     return { url: url.toString() };
   }),
   signInCredentials: publicProcedure
-    .input(
-      z.object({
-        email: z.string().email(),
-        password: z.string(),
-      }),
-    )
+    .input(loginSchema)
     .mutation(async ({ ctx, input }) => {
       const existingUser = await db.query.users.findFirst({
         where: (user, { eq }) => eq(user.email, input.email),
@@ -93,12 +92,7 @@ export const authRouter = createTRPCRouter({
       );
     }),
   registerCredentials: publicProcedure
-    .input(
-      z.object({
-        email: z.string().email(),
-        password: z.string().min(6).max(20),
-      }),
-    )
+    .input(registerSchema)
     .mutation(async ({ ctx, input }) => {
       const existingUser = await db.query.users.findFirst({
         where: (user, { eq }) => eq(user.email, input.email),

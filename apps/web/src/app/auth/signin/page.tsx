@@ -1,8 +1,10 @@
 'use client';
 
-import { appRouter } from '@farm/trpc-api';
+import { RouterInputs, appRouter } from '@farm/trpc-api';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import { api } from 'src/trpc/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 function SignInPage() {
   const router = useRouter();
@@ -10,6 +12,11 @@ function SignInPage() {
     onSuccess: ({ url }) => {
       router.push(url);
     },
+  });
+
+  const form = useForm<RouterInputs['auth']['signInCredentials']>({
+    defaultValues: { email: '', password: '' },
+    resolver: zodRe,
   });
 
   return (
