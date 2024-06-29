@@ -6,6 +6,7 @@ import {
   CreateTRPCReact,
   createTRPCReact,
   httpBatchLink,
+  inferReactQueryProcedureOptions,
   loggerLink,
 } from '@trpc/react-query';
 import { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
@@ -36,6 +37,8 @@ const getQueryClient = () => {
 
 export const api: CreateTRPCReact<AppRouter, unknown, null> =
   createTRPCReact<AppRouter>();
+
+export type ReactQueryOptions = inferReactQueryProcedureOptions<AppRouter>;
 export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
 

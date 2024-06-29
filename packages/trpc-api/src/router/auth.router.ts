@@ -5,7 +5,7 @@ import cookie from '@fastify/cookie';
 import { z } from 'zod';
 import { db, emailVerifications, lucia, users } from '@farm/db';
 import { TRPCError } from '@trpc/server';
-import argon from '@node-rs/argon2';
+import argon, { verify } from '@node-rs/argon2';
 import { generateEmailVerificationCode } from '../utils/verification-code';
 import { eq } from 'drizzle-orm';
 import { isWithinExpirationDate } from 'oslo';
@@ -47,6 +47,51 @@ export const authRouter = createTRPCRouter({
 
     return { url: url.toString() };
   }),
+  signInCredentials: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        password: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const existingUser = await db.query.users.findFirst({
+        where: (user, { eq }) => eq(user.email, input.email),
+      });
+
+      if (!existingUser)
+        throw new TRPCError({
+          message: 'Invalid credentials',
+          code: 'BAD_REQUEST',
+        });
+
+      // If user exists but has no password, means that he was logged with provider
+      if (!existingUser.passwordHash)
+        throw new TRPCError({
+          message: 'Try using provider',
+          code: 'BAD_REQUEST',
+        });
+
+      const validPassword = await verify(
+        existingUser.passwordHash,
+        input.password,
+        ARGON_HASHING_OPTIONS,
+      );
+
+      if (!validPassword)
+        throw new TRPCError({
+          message: 'Invalid credentials',
+          code: 'BAD_REQUEST',
+        });
+
+      const session = await lucia.createSession(existingUser.id, {});
+      const sessionCookie = lucia.createSessionCookie(session.id);
+      ctx.res.setCookie(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+    }),
   registerCredentials: publicProcedure
     .input(
       z.object({
