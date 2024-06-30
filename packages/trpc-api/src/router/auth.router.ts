@@ -102,6 +102,7 @@ export const authRouter = createTRPCRouter({
 
       const salt = await bcrypt.genSalt(10);
       const passwordHash = await bcrypt.hash(input.password, salt);
+      console.log(passwordHash);
 
       // Create user in DB
       const [newUser] = await db

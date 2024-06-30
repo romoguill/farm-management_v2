@@ -50,6 +50,13 @@
       "when": 1719068430884,
       "tag": "0006_naive_vector",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1719765640204,
+      "tag": "0007_abnormal_frightful_four",
+      "breakpoints": true
     }
   ]
 }
