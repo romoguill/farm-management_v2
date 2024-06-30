@@ -16,6 +16,7 @@ import { api } from '../../../trpc/react';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { Separator } from '@/components/ui/separator';
 
 function SignInPage() {
   const router = useRouter();
@@ -33,7 +34,7 @@ function SignInPage() {
   const onSubmit: SubmitHandler<z.infer<typeof loginSchema>> = (data) => {};
 
   return (
-    <div className='border-primary w-full border sm:w-[400px]'>
+    <div className='w-full sm:w-[400px]'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
           <FormField
@@ -60,10 +61,20 @@ function SignInPage() {
               </FormItem>
             )}
           />
-          <Button type='submit'>Sign In</Button>
+          <Button type='submit' className='w-full'>
+            Sign In
+          </Button>
         </form>
       </Form>
-      <Button>
+
+      <div className='my-5 flex items-center'>
+        <Separator className='h-[2px] shrink bg-amber-900/20' />
+        <p className='mx-2 text-xs font-semibold leading-none text-amber-900'>
+          OR
+        </p>
+        <Separator className='h-[2px] shrink bg-amber-900/20' />
+      </div>
+      <Button className='w-full'>
         <Image src='/google.svg' height={16} width={16} alt='google logo' />
         Sign In with Google
       </Button>
