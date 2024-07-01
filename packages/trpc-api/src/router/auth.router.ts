@@ -10,6 +10,7 @@ import { eq } from 'drizzle-orm';
 import { isWithinExpirationDate } from 'oslo';
 import { loginSchema, registerSchema } from '../validation-schemas/auth.schema';
 import bcrypt from 'bcryptjs';
+import { sendVerificationEmail } from '../lib/send-email';
 
 // Recomended options from docs
 const ARGON_HASHING_OPTIONS = {
@@ -122,8 +123,16 @@ export const authRouter = createTRPCRouter({
         newUser.email,
       );
 
-      // TODO: Send email with verification code
-      // await sendEmailWithVerificationCode(newUser.email, verificationCode)
+      const emailError = await sendVerificationEmail({
+        to: [newUser.email],
+        code: verificationCode,
+      });
+      console.log(emailError);
+      if (emailError)
+        return new TRPCError({
+          message: "Couldn't send verification email",
+          code: 'INTERNAL_SERVER_ERROR',
+        });
 
       const session = await lucia.createSession(newUser.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
@@ -136,6 +145,29 @@ export const authRouter = createTRPCRouter({
 
       return { user: newUser };
     }),
+  // Optional for recreating code if user doesn't recieve email with code
+  resendCode: protectedProcedure.mutation(async ({ ctx }) => {
+    // Delete old code
+    await db
+      .delete(emailVerifications)
+      .where(eq(emailVerifications.email, ctx.user.email));
+
+    const verificationCode = await generateEmailVerificationCode(
+      ctx.user.id,
+      ctx.user.email,
+    );
+
+    const emailError = await sendVerificationEmail({
+      to: [ctx.user.email],
+      code: verificationCode,
+    });
+    console.log(emailError);
+    if (emailError)
+      return new TRPCError({
+        message: "Couldn't send verification email",
+        code: 'INTERNAL_SERVER_ERROR',
+      });
+  }),
   // For user to use code sent to email
   emailVerification: protectedProcedure
     .input(

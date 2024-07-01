@@ -1,23 +1,21 @@
 import { Resend } from 'resend';
 
-type SendEmailOps = {
-  from: string;
+const EMAIL_FROM = 'Farm <onboarding@rodrigomoguillanksy.com>';
+
+type VerificationOptions = {
   to: string[];
-  subject: string;
   code: string;
 };
 
 export const sendVerificationEmail = async ({
-  from,
   to,
-  subject,
   code,
-}: SendEmailOps) => {
+}: VerificationOptions) => {
   const resend = new Resend(process.env.RESEND_API_KEY);
   const { error } = await resend.emails.send({
-    from,
+    from: EMAIL_FROM,
     to,
-    subject,
+    subject: 'Farm: Verification Code',
     html: `
       <!DOCTYPE html>
         <html lang="en">
