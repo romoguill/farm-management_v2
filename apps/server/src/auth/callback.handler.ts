@@ -81,6 +81,7 @@ export async function googleHandler(
           email: userProfile.email,
           googleId: userProfile.sub,
           username: userProfile.name,
+          emailVerified: userProfile.email_verified,
         })
         .returning()
     )[0];
