@@ -20,16 +20,19 @@ import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { useState } from 'react';
 import Link from 'next/link';
+import AsyncButton from '@/components/global/AsyncButton';
 
 function SignInPage() {
   const [submitError, setSubmitError] = useState('');
   const router = useRouter();
-  const { mutate: loginWithGoogle } = api.auth.signInGoogle.useMutation({
-    onSuccess: ({ url }) => {
-      router.push(url);
-    },
-  });
-  const { mutate: loginWithCredentials, error: errorWithCredentials } =
+
+  const { mutate: loginWithGoogle, isLoading: isGoogleLoading } =
+    api.auth.signInGoogle.useMutation({
+      onSuccess: ({ url }) => {
+        router.push(url);
+      },
+    });
+  const { mutate: loginWithCredentials, isLoading: isCredentialsLoading } =
     api.auth.signInCredentials.useMutation({
       onError: (error) => {
         setSubmitError(error.message);
@@ -76,9 +79,13 @@ function SignInPage() {
             )}
           />
           {submitError && <p className='my-2 text-red-500'>{submitError}</p>}
-          <Button type='submit' className='w-full'>
+          <AsyncButton
+            type='submit'
+            className='w-full'
+            isLoading={isCredentialsLoading}
+          >
             Sign In
-          </Button>
+          </AsyncButton>
         </form>
       </Form>
 
@@ -97,10 +104,14 @@ function SignInPage() {
         <Separator className='h-[2px] shrink bg-amber-900/20' />
       </div>
 
-      <Button className='flex w-full gap-2'>
+      <AsyncButton
+        className='flex w-full gap-2'
+        onClick={() => loginWithGoogle()}
+        isLoading={isGoogleLoading}
+      >
         <Image src='/google.svg' height={16} width={16} alt='google logo' />
         Sign In with Google
-      </Button>
+      </AsyncButton>
     </div>
   );
 }
