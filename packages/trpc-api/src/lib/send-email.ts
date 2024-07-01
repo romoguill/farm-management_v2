@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-const EMAIL_FROM = 'Farm <onboarding@rodrigomoguillanksy.com>';
+const EMAIL_FROM = `Farm <onboarding@${process.env.HOST}>`;
 
 type VerificationOptions = {
   to: string[];
@@ -25,8 +25,8 @@ export const sendVerificationEmail = async ({
           <title>Confirm Email</title>
         </head>
         <body>
-          <h1>Welcome to Farm, to complete registration process use this code:</h1>
-          <p>${code}</p>
+          <p>Welcome to Farm, to complete registration process use this code:</p>
+          <p style="font-style:bold;">${code}</p>
         </body>
         </html>
     `,

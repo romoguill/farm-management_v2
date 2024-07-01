@@ -48,7 +48,10 @@ function AuthSection() {
       <DropdownMenu>
         <DropdownMenuTrigger className='ml-auto'>
           <Avatar className='cursor-pointer'>
-            <AvatarFallback>{data.user.username[0]}</AvatarFallback>
+            <AvatarFallback>
+              {data.user.username?.[0]?.toUpperCase() ||
+                data.user.email[0]?.toLocaleUpperCase()}
+            </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()}>

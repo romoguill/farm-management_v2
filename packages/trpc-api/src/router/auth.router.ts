@@ -103,7 +103,6 @@ export const authRouter = createTRPCRouter({
 
       const salt = await bcrypt.genSalt(10);
       const passwordHash = await bcrypt.hash(input.password, salt);
-      console.log(passwordHash);
 
       // Create user in DB
       const [newUser] = await db
@@ -123,13 +122,14 @@ export const authRouter = createTRPCRouter({
         newUser.email,
       );
 
-      const emailError = await sendVerificationEmail({
+      const { error: emailError } = await sendVerificationEmail({
         to: [newUser.email],
         code: verificationCode,
       });
+
       console.log(emailError);
       if (emailError)
-        return new TRPCError({
+        throw new TRPCError({
           message: "Couldn't send verification email",
           code: 'INTERNAL_SERVER_ERROR',
         });
@@ -142,6 +142,8 @@ export const authRouter = createTRPCRouter({
         sessionCookie.value,
         sessionCookie.attributes,
       );
+
+      console.log(ctx.res.cookies);
 
       return { user: newUser };
     }),
