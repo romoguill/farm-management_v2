@@ -67,8 +67,7 @@ function AuthSection() {
     );
   }
 
-  console.log(authSection);
-
   return <>{authSection}</>;
 }
+
 export default AuthSection;
