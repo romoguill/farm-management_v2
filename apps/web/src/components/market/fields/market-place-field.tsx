@@ -13,16 +13,18 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
+  MarketPlace,
   currencySchema,
+  marketPlaceSchema,
   type Currency,
 } from '@farm/trpc-api/validation-schemas';
 import { ControllerProps } from 'react-hook-form';
 
 type FormValues = {
-  currency: Currency;
+  marketPlace: MarketPlace;
 };
 
-function CurrencyField({
+function MarketPlaceField({
   control,
 }: {
   control: ControllerProps<FormValues>['control'];
@@ -30,25 +32,25 @@ function CurrencyField({
   return (
     <FormField
       control={control}
-      name='currency'
+      name='marketPlace'
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Currency</FormLabel>
+          <FormLabel>Market Place</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder='Pick currency...' />
+                  <SelectValue placeholder='Pick market...' />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {currencySchema.options.map((currency) => (
+                {marketPlaceSchema.options.map((marketPlace) => (
                   <SelectItem
-                    key={currency}
-                    value={currency}
+                    key={marketPlace}
+                    value={marketPlace}
                     className='capitalize'
                   >
-                    {currency.toLocaleUpperCase()}
+                    {marketPlace.toLocaleUpperCase()}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -60,4 +62,4 @@ function CurrencyField({
     />
   );
 }
-export default CurrencyField;
+export default MarketPlaceField;
