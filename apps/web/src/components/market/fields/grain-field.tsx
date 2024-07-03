@@ -14,15 +14,17 @@ import {
 } from '@/components/ui/select';
 import {
   Derivative,
+  Grain,
   derivativeSchema,
+  grainSchema,
 } from '@farm/trpc-api/validation-schemas';
 import { ControllerProps } from 'react-hook-form';
 
 type FormValues = {
-  derivative: Derivative;
+  grain: Grain;
 };
 
-function DerivativeField({
+function GrainField({
   control,
 }: {
   control: ControllerProps<FormValues>['control'];
@@ -30,25 +32,21 @@ function DerivativeField({
   return (
     <FormField
       control={control}
-      name='derivative'
+      name='grain'
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Derivative</FormLabel>
+          <FormLabel>Grain</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder='Pick derivative...' />
+                  <SelectValue placeholder='Pick grain...' />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {derivativeSchema.options.map((derivative) => (
-                  <SelectItem
-                    key={derivative}
-                    value={derivative}
-                    className='capitalize'
-                  >
-                    {derivative.toLocaleUpperCase()}
+                {grainSchema.options.map((grain) => (
+                  <SelectItem key={grain} value={grain} className='capitalize'>
+                    {grain.toLocaleUpperCase()}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -60,4 +58,4 @@ function DerivativeField({
     />
   );
 }
-export default DerivativeField;
+export default GrainField;
