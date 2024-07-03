@@ -85,13 +85,46 @@ function MarketFilter() {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name='settlement'
-          render={({ field }) => (
-            <CalendarInput onChange={field.onChange} value={field.value} />
-          )}
-        />
+        <div className='grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-x-3 gap-y-[12px]'>
+          <FormField
+            control={form.control}
+            name='settlement'
+            render={({ field }) => (
+              <CalendarInput
+                onChange={field.onChange}
+                value={field.value}
+                label='Settlement'
+                placeholder='Date'
+              />
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='from'
+            render={({ field }) => (
+              <CalendarInput
+                onChange={field.onChange}
+                value={field.value}
+                label='From'
+                placeholder='Start date'
+              />
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='to'
+            render={({ field }) => (
+              <CalendarInput
+                onChange={field.onChange}
+                value={field.value}
+                label='To'
+                placeholder='End date'
+              />
+            )}
+          />
+        </div>
 
         <AsyncButton>Submit</AsyncButton>
       </form>

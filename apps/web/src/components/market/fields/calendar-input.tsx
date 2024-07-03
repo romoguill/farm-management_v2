@@ -19,23 +19,30 @@ import { format } from 'date-fns';
 interface CalendarInputProps {
   value: Date;
   onChange: (value: Date | undefined) => void;
+  label: string;
+  placeholder: string;
 }
 
-function CalendarInput({ value, onChange }: CalendarInputProps) {
+function CalendarInput({
+  value,
+  onChange,
+  label,
+  placeholder,
+}: CalendarInputProps) {
   return (
-    <FormItem className='flex flex-col'>
-      <FormLabel>Date of birth</FormLabel>
+    <FormItem className='space-y-2'>
+      <FormLabel>{label}</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
           <FormControl>
             <Button
               variant={'outline'}
               className={cn(
-                'w-[240px] pl-3 text-left font-normal',
+                'w-full min-w-[140px] pl-3 text-left font-normal',
                 !value && 'text-muted-foreground',
               )}
             >
-              {value ? format(value, 'PPP') : <span>Pick a date</span>}
+              {value ? format(value, 'PPP') : <span>{placeholder}</span>}
               <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
             </Button>
           </FormControl>
@@ -52,9 +59,6 @@ function CalendarInput({ value, onChange }: CalendarInputProps) {
           />
         </PopoverContent>
       </Popover>
-      <FormDescription>
-        Your date of birth is used to calculate your age.
-      </FormDescription>
       <FormMessage />
     </FormItem>
   );
