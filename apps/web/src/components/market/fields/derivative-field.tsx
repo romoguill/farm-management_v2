@@ -13,16 +13,18 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
+  Derivative,
   MarketPlace,
+  derivativeSchema,
   marketPlaceSchema,
 } from '@farm/trpc-api/validation-schemas';
 import { ControllerProps } from 'react-hook-form';
 
 type FormValues = {
-  marketPlace: MarketPlace;
+  derivative: Derivative;
 };
 
-function MarketPlaceField({
+function DerivativeField({
   control,
 }: {
   control: ControllerProps<FormValues>['control'];
@@ -30,25 +32,25 @@ function MarketPlaceField({
   return (
     <FormField
       control={control}
-      name='marketPlace'
+      name='derivative'
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Market Place</FormLabel>
+          <FormLabel>Derivative</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder='Pick market...' />
+                  <SelectValue placeholder='Pick derivative...' />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {marketPlaceSchema.options.map((marketPlace) => (
+                {derivativeSchema.options.map((derivative) => (
                   <SelectItem
-                    key={marketPlace}
-                    value={marketPlace}
+                    key={derivative}
+                    value={derivative}
                     className='capitalize'
                   >
-                    {marketPlace.toLocaleUpperCase()}
+                    {derivative.toLocaleUpperCase()}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -60,4 +62,4 @@ function MarketPlaceField({
     />
   );
 }
-export default MarketPlaceField;
+export default DerivativeField;
