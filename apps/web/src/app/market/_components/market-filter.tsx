@@ -85,7 +85,7 @@ function MarketFilter() {
           )}
         />
 
-        <div className='grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-x-3 gap-y-[12px]'>
+        <div className='grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3'>
           <FormField
             control={form.control}
             name='settlement'
