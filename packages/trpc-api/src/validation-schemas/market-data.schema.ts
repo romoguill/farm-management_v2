@@ -70,11 +70,11 @@ export const marketQuerySchema = z
   .object({
     grain: grainSchema,
     marketPlace: marketPlaceSchema,
-    settlement: z.string().date(),
+    settlement: z.date(),
     derivative: derivativeSchema,
     currencyRef: currencySchema,
-    from: z.string().date(),
-    to: z.string().date(),
+    from: z.date(),
+    to: z.date(),
   })
   .refine((data) => data.from <= data.to);
 
