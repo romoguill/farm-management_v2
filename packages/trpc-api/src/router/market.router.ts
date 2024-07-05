@@ -10,6 +10,6 @@ export const marketRouter = createTRPCRouter({
 
     url.search = parsedQueryParams.toString();
 
-    console.log({ URL: url });
+    return { url };
   }),
 });

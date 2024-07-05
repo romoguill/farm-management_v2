@@ -40,6 +40,7 @@ export type SymbolAPI = z.infer<typeof symbolAPISchema>;
 export const marketApiQueryDTO = z.object({
   product: symbolAPISchema,
   underlying: z.string().optional(),
+  symbol: z.string().optional(),
   type: z.union([z.literal('FUT'), z.literal('OPT')]),
   segment: z.literal('Agropecuario'),
   excludeEmptyVol: z.coerce

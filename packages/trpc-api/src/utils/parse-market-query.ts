@@ -5,7 +5,7 @@ import {
   derivativeSchema,
   grainSchema,
   marketPlaceSchema,
-} from 'src/validation-schemas';
+} from '../validation-schemas';
 
 export const parseMarketDataQuery = (
   query: MarketDataQueryDTO,
@@ -57,14 +57,22 @@ export const parseMarketDataQuery = (
     }/${monthOfSettlement.toUpperCase()}${yearOfSettlement}`;
   };
 
+  const formatDateRange = (date: Date) => {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  };
+
+  // If the derivative is future it expects "symbol", else expects "underlying"
+  const queryTokenName =
+    parseDerivative[query.derivative] === 'FUT' ? 'symbol' : 'underlying';
+
   return {
     product,
-    underlying: getUnderlingToken(),
+    [queryTokenName]: getUnderlingToken(),
     type: parseDerivative[query.derivative],
     segment: 'Agropecuario',
     excludeEmptyVol: 'true',
-    from: query.from.toUTCString(),
-    to: query.to.toUTCString(),
+    from: formatDateRange(query.from),
+    to: formatDateRange(query.to),
     sortDir: 'ASC',
     market: 'ROFX',
   };

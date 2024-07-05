@@ -7,36 +7,45 @@ import DerivativeInput from '@/components/market/fields/derivative-input';
 import GrainInput from '@/components/market/fields/grain-input';
 import MarketPlaceInput from '@/components/market/fields/market-place-input';
 import { Form, FormField } from '@/components/ui/form';
+import { api } from '@/trpc/react';
 import {
+  MarketDataQueryDTO,
   currencySchema,
   derivativeSchema,
   grainSchema,
   marketPlaceSchema,
+  marketQuerySchema,
 } from '@farm/trpc-api/validation-schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-const marketSchema = z.object({
-  currency: currencySchema,
-  derivative: derivativeSchema,
-  marketPlace: marketPlaceSchema,
-  grain: grainSchema,
-  settlement: z.date(),
-  from: z.date(),
-  to: z.date(),
-});
-
-type MarketSchema = z.infer<typeof marketSchema>;
-
 function MarketFilter() {
-  const form = useForm<MarketSchema>({
-    resolver: zodResolver(marketSchema),
+  const form = useForm<MarketDataQueryDTO>({
+    resolver: zodResolver(marketQuerySchema),
+    defaultValues: {
+      currencyRef: 'DOLAR',
+      derivative: 'FUTURE',
+      from: new Date(),
+      to: new Date(),
+      settlement: new Date(),
+      grain: 'SOY',
+      marketPlace: 'ROSARIO',
+    },
   });
 
-  const onSubmit: SubmitHandler<MarketSchema> = (data) => {
-    console.log(data);
+  console.log({ values: form.getValues() });
+
+  const { data, isLoading, refetch } = api.market.getData.useQuery(
+    form.getValues(),
+    { enabled: false },
+  );
+
+  const onSubmit: SubmitHandler<MarketDataQueryDTO> = (data) => {
+    refetch();
   };
+
+  console.log(data);
 
   return (
     <Form {...form}>
@@ -46,7 +55,7 @@ function MarketFilter() {
       >
         <FormField
           control={form.control}
-          name='currency'
+          name='currencyRef'
           render={({ field }) => (
             <CurrencyInput
               onChange={field.onChange}
