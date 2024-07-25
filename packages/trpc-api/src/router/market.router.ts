@@ -3,6 +3,11 @@ import { createTRPCRouter, publicProcedure } from '../trpc';
 import { parseMarketDataQuery } from '../utils/parse-market-query';
 import { MarketData, marketQuerySchema } from '../validation-schemas';
 
+interface MarketDataApiResponse {
+  data: MarketData;
+  error?: { message: string };
+}
+
 export const marketRouter = createTRPCRouter({
   getData: publicProcedure.input(marketQuerySchema).query(async ({ input }) => {
     const url = new URL(process.env.MARKET_API_BASE_URL!);
@@ -14,12 +19,12 @@ export const marketRouter = createTRPCRouter({
     try {
       const response = await fetch(url);
 
-      const { data, error } = await response.json();
+      const { data, error }: MarketDataApiResponse = await response.json();
 
       if (response.ok) {
         return data;
       } else {
-        throw new Error(`API failed with error: ${error.message}`);
+        throw new Error(`API failed with error: ${error?.message}`);
       }
     } catch (error) {
       if (error instanceof Error) {
