@@ -34,8 +34,6 @@ function MarketFilter() {
     },
   });
 
-  console.log({ values: form.getValues() });
-
   const { data, isLoading, refetch } = api.market.getData.useQuery(
     form.getValues(),
     { enabled: false },
@@ -44,8 +42,6 @@ function MarketFilter() {
   const onSubmit: SubmitHandler<MarketDataQueryDTO> = (data) => {
     refetch();
   };
-
-  console.log(data);
 
   return (
     <Form {...form}>
