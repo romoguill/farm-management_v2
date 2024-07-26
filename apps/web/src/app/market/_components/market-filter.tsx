@@ -17,11 +17,15 @@ import {
   marketQuerySchema,
 } from '@farm/trpc-api/validation-schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-function MarketFilter() {
+interface MarketFilterProps {
+  onApply: React.Dispatch<SetStateAction<MarketDataQueryDTO | null>>;
+}
+
+function MarketFilter({ onApply }: MarketFilterProps) {
   const [sample, setSample] = useState<any>(null);
   const form = useForm<MarketDataQueryDTO>({
     resolver: zodResolver(marketQuerySchema),
@@ -41,11 +45,8 @@ function MarketFilter() {
     { enabled: false },
   );
 
-  const onSubmit: SubmitHandler<MarketDataQueryDTO> = async () => {
-    refetch().then((res) => {
-      console.log(res);
-      setSample(res.data);
-    });
+  const onSubmit: SubmitHandler<MarketDataQueryDTO> = async (data) => {
+    onApply(data);
   };
 
   return (

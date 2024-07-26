@@ -18,7 +18,7 @@ function MarketChart({ chartData }: MarketChartProps) {
   return (
     <ChartContainer config={chartConfig} className='min-h-[200px] w-full'>
       <LineChart accessibilityLayer data={chartData}>
-        <Line dataKey='price' fill='#000' radius={4} />
+        <Line dataKey='price' fill='#ccc' radius={4} />
         <CartesianGrid />
         <XAxis dataKey='date' tickMargin={20} />
         <YAxis />

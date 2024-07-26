@@ -4,7 +4,7 @@ import { parseMarketDataQuery } from '../utils/parse-market-query';
 import { MarketData, marketQuerySchema } from '../validation-schemas';
 
 interface MarketDataApiResponse {
-  data: MarketData;
+  data: MarketData[];
   error?: { message: string };
 }
 
