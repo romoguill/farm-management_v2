@@ -1,9 +1,9 @@
-import MarketFilter from './_components/market-filter';
+import MarketDataContainer from './_components/maket-data-container';
 
 function MarketPage() {
   return (
     <div>
-      <MarketFilter />
+      <MarketDataContainer />
     </div>
   );
 }
