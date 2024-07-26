@@ -1,23 +1,27 @@
+'use client';
+
 import { ChartContainer } from '@/components/ui/chart';
-import { Line, LineChart } from 'recharts';
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 
 const chartConfig = {
-  closingPrice: {
-    label: 'Closing Price',
+  price: {
+    label: 'Price',
     color: 'hsl(var(--chart-1))',
   },
 };
 
 interface MarketChartProps {
-  chartData: Array<{ date: string; closingPrice: number }>;
+  chartData: Array<{ date: string; price: number }>;
 }
 
 function MarketChart({ chartData }: MarketChartProps) {
   return (
     <ChartContainer config={chartConfig} className='min-h-[200px] w-full'>
       <LineChart accessibilityLayer data={chartData}>
-        <Line dataKey='desktop' fill='var(--color-desktop)' radius={4} />
-        <Line dataKey='mobile' fill='var(--color-mobile)' radius={4} />
+        <Line dataKey='price' fill='#000' radius={4} />
+        <CartesianGrid />
+        <XAxis dataKey='date' tickMargin={20} />
+        <YAxis />
       </LineChart>
     </ChartContainer>
   );
