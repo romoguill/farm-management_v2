@@ -44,7 +44,7 @@ export const parseMarketDataQuery = (
       timeZone: 'UTC',
     });
 
-    const monthOfSettlement = formatterMonth.format(date);
+    const monthOfSettlement = formatterMonth.format(date).slice(0, 3);
 
     const formatterYear = new Intl.DateTimeFormat('es', {
       year: '2-digit',

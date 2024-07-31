@@ -15,6 +15,7 @@ export const marketRouter = createTRPCRouter({
     const parsedQueryParams = new URLSearchParams(parseMarketDataQuery(input));
 
     url.search = parsedQueryParams.toString();
+    console.log({ url });
 
     try {
       const response = await fetch(url);
@@ -22,6 +23,7 @@ export const marketRouter = createTRPCRouter({
       const { data, error }: MarketDataApiResponse = await response.json();
 
       if (response.ok) {
+        console.log({ apiResponse: response, apiBody: data });
         return data;
       } else {
         throw new Error(`API failed with error: ${error?.message}`);
