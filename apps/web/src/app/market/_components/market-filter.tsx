@@ -139,8 +139,6 @@ function MarketFilter({ onApply }: MarketFilterProps) {
 
         <AsyncButton>Submit</AsyncButton>
       </form>
-
-      <p>{JSON.stringify(sample)}</p>
     </Form>
   );
 }
